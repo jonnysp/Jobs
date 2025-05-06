@@ -1,0 +1,92 @@
+
+<h1><?= $this->AnimalsCategorie['title'] ?></h1>
+<?= $this->AnimalsCategorie['description']; ?>
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3">
+	<?php foreach ($this->Animals as $Animalskey => $Animal): ?>
+	<div class="col">	
+		<div class="card clearfix ce_image text-white mb-3">
+			<figure class="card-img mb-0" style="overflow: hidden; " itemscope="" itemtype="http://schema.org/ImageObject" itemprop="associatedMedia">
+			
+				<div class="ratio ratio-4x3">
+					<a itemprop="contentURL" href="#" data-bs-toggle="modal" data-bs-target="#Animal_<?=$Animalskey?>" >
+						<img src="<?= $Animal['image']['path'] ?>" alt="<?= $Animal['title'] ?>" class="w-100 h-100 object-fit-cover" itemprop="image">
+						<figcaption class="carousel-caption bg-primary p-1" itemprop="caption">
+							<h5 class="text-light"><?= $Animal['title'] ?></h5>
+						</figcaption>
+					</a>
+				</div>				
+				
+			</figure>
+		</div>
+	</div>	
+	<?php endforeach; ?>
+</div>
+
+<!-- modals for Animal-->
+<?php foreach ($this->Animals as $Animalskey => $Animal): ?>
+
+	<div class="modal fade" id="Animal_<?=$Animalskey?>" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" >
+		  <div class="modal-content">
+		    <div class="modal-header">
+		      <h5 class="modal-title"><?= $Animal['title'] ?></h5>
+		      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		    </div>
+
+
+			<div id="carouselAnimal_<?=$Animalskey?>" class="carousel slide" data-ride="carousel">
+
+			<!-- indicators when multiple images -->
+				<?php if(count($Animal['images']) > 1): ?>
+					<ol class="carousel-indicators">
+						<?php foreach ($Animal['images'] as $key => $value): ?>
+				    		<li data-bs-target="#carouselAnimal_<?=$Animalskey?>" data-bs-slide-to="<?=$key ?>" <?= ($key == 0 ? 'class="active"' : ''); ?> ></li>
+						<?php endforeach; ?>
+					</ol>
+				<?php endif; ?>
+
+				<!-- images -->
+				<div class="carousel-inner">
+					<?php foreach ($Animal['images'] as $key => $value): ?>
+					    <div class="carousel-item <?= ($key == 0 ? 'active' : ''); ?>">
+							<div class="ratio ratio-4x3">					    	
+					        	<img src="<?= $value['path'] ?>" class=" w-100 h-100 object-fit-cover" alt="...">
+							</div>	        
+					    </div>
+					<?php endforeach; ?>
+				</div>
+
+				<?php if(count($Animal['images']) > 1): ?>
+				   <a class="carousel-control-prev" href="#carouselAnimal_<?=$Animalskey?>" role="button" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    				<span class="visually-hidden">Previous</span>
+				  </a>
+				  <a class="carousel-control-next" href="#carouselAnimal_<?=$Animalskey?>" role="button" data-bs-slide="next">
+				    	<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					    <span class="visually-hidden">Next</span>
+				  </a>
+				<?php endif; ?>
+
+			</div>
+
+		    <div class="modal-body">
+		    	<?php if($Animal['description']): ?>
+		    		<h5>{{label::tl_Animals:description:0}}</h5>
+		    		<?= $Animal['description']; ?>
+		    	<?php endif; ?>
+		    </div>
+		    
+		  </div>
+		</div>
+	</div>
+
+<?php endforeach; ?>
+
+
+
+
+
+<?php 
+//$this->showTemplateVars();
+?>

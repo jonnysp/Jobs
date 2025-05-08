@@ -20,11 +20,11 @@ class JobModel extends \Model
         $out .='    "description" : "'. $this->shortdescription .'",';
     };
 
-    if (isset($this->datePosted)){
+    if (isset($this->datePosted ) && (int)$this->datePosted > 0){
         $out .='    "datePosted" : "'.  date('Y-m-d', $this->datePosted)  .'",';
     };
 
-    if (isset($this->validThrough)){
+    if (isset($this->validThrough) && (int)$this->validThrough > 0){
         $out .='    "validThrough" : "'. date('Y-m-d\TH:i:s', $this->validThrough).'",';
     };
 
@@ -83,6 +83,5 @@ class JobModel extends \Model
 
 
 }
-
 
 

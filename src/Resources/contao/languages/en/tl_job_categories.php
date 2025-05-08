@@ -6,13 +6,13 @@
 $GLOBALS['TL_LANG']['tl_job_categories']['title']       = array('Job Category Name', 'Enter the category name here.');
 $GLOBALS['TL_LANG']['tl_job_categories']['image']       = array('Job category picture', 'Category picture.');
 $GLOBALS['TL_LANG']['tl_job_categories']['description'] = array('Job Category Description', 'Category description.');
-
+$GLOBALS['TL_LANG']['tl_job_categories']['jumpTo']      = array('Redirection Site', '');
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_job_categories']['title_legend'] = 'Job Basic Settings';
-$GLOBALS['TL_LANG']['tl_job_categories']['image_legend'] = 'Job category picture';
+$GLOBALS['TL_LANG']['tl_job_categories']['title_legend'] = 'Job category Basic Settings';
+$GLOBALS['TL_LANG']['tl_job_categories']['image_legend'] = 'Job category Settings';
 
 
 /**

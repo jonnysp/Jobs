@@ -94,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,published;{title_images},image,images;{title_description},description;'
+		'default'                     => '{title_legend},title,published,shortdescription,description,image,download,datePosted,validThrough,directApply,jobLocationType,employmentType;{organization_legend},Organization_logo,Organization_name,Organization_sameAs,street,postalCode,Locality,Region,Country;'
 	),
 
 	// Fields
@@ -104,18 +104,32 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL auto_increment"
 		),
+
 		'pid' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
+
 		'sorting' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
+
 		'tstamp' => array
 		(
 			'sql'                     => ['type' => 'integer','notnull' => false, 'unsigned' => true,'default' => '0','fixed' => true]
 		),
+
+		'published' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['toggle'],
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('submitOnChange'=>true, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'sql'                     => "char(1) NOT NULL default ''",
+			'save_callback'			  => array()
+		),
+
 		'title' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['title'],
@@ -124,29 +138,15 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
 		),
-		'image' => array
+
+		'shortdescription' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['image'],
-			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes']),
-			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['shortdescription'],
+			'inputType'               => 'textarea',
+			'eval'                    => array('rte'=>'tinyMCE','tl_class'=>'clr'),
+			'sql'                     => ['type' => 'text','notnull' => false]
 		),
-		'images' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['images'],
-			'inputType'               => 'fileTree',
-			'eval'                    => array('multiple'=>true, 'fieldType'=>'checkbox', 'orderField'=>'imagessort', 'files'=>true,'tl_class'=>'long clr','filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes']),
-			'sql'                     => ['type' => 'blob','notnull' => false],
-			'load_callback' => array
-			(
-				array('tl_job', 'setFileTreeFlags')
-			)
-		),
-		'imagessort' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['imagessort'],
-			'sql'                     => ['type' => 'blob','notnull' => false]
-		),
+
 		'description' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['description'],
@@ -154,20 +154,148 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 			'eval'                    => array('rte'=>'tinyMCE','tl_class'=>'clr'),
 			'sql'                     => ['type' => 'text','notnull' => false]
 		),
-		'published' => array
+
+		'datePosted' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['toggle'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['datePosted'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('mandatory'=>true,'rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		),
+
+		'validThrough' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['validThrough'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+			'sql'                     => "varchar(10) NOT NULL default ''"
+		),
+
+		'jobLocationType' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['jobLocationType'],
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'eval'                    => array('submitOnChange'=>false, 'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "char(1) NOT NULL default ''"
+		),
+
+		'employmentType' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['employmentType'],
+			'inputType'               => 'select',
+			'options'                 => array('FULL_TIME','PART_TIME','TEMPORARY','INTERN','VOLUNTEER','OTHER'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_job'],
+			'eval'                    => array( 'tl_class'=>'w100 clr', 'mandatory' => true),
+			'sql'                     => "varchar(128) NOT NULL default 'FULL_TIME'"
+		),
+
+		'directApply' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['directApply'],
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('submitOnChange'=>false, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		
+		'Organization_name' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Organization_name'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'Organization_sameAs' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Organization_sameAs'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'Organization_logo' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['Organization_logo'],
+			'inputType'               => 'fileTree',
+			'eval'                    => array( 'fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes'], 'tl_class'=>'w100 clr'),
+			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
+		),
+
+		'street' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['street'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w100 clr'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'Locality' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Locality'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'Region' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Region'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'postalCode' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['postalCode'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
+		),
+
+		'Country' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Country'],
+			'search'              	=> true,
+			'inputType'          	=> 'text',
+			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
+			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => 'DE']
+		),
+
+		'download' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['download'],
+			'exclude'                 => true,
+			'inputType'               => 'fileTree',
+			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'mandatory'=>false, 'tl_class'=>'w100 clr', 'extensions' => Config::get('allowedDownload')),
+			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
+		),
+
+		'image' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['image'],
+			'inputType'               => 'fileTree',
+			'eval'                    => array( 'fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes'], 'tl_class'=>'w100 clr'),
+			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
 		)
+
 	)
 );
 
 use Contao\Image\ResizeConfiguration;
 
 class tl_job extends Backend{
+
 
 	public function generateReferenzRow($arrRow)	{
 		$this->loadLanguageFile('tl_job');
@@ -190,14 +318,6 @@ class tl_job extends Backend{
     }
 
 
-	public function setFileTreeFlags($varValue, DataContainer $dc)
-	{
-		if ($dc->activeRecord)
-		{
-				$GLOBALS['TL_DCA'][$dc->table]['fields'][$dc->field]['eval']['isGallery'] = true;
-		}
-		return $varValue;
-	}
 
 
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
@@ -242,8 +362,7 @@ class tl_job extends Backend{
 		}
 
 		// Update the database
-		$this->Database->prepare("UPDATE tl_job SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
-					   ->execute($intId);
+		$this->Database->prepare("UPDATE tl_job SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")->execute($intId);
 	}
 
 }

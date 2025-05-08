@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title;{image_legend},image,description;'
+		'default'                     => '{title_legend},title,jumpTo;{image_legend},image,description;'
 	),
 
 	// Fields
@@ -107,6 +107,16 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(128) NOT NULL default ''"
+		),
+		'jumpTo' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job_categories']['jumpTo'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'foreignKey'              => 'tl_page.title',
+			'eval'                    => array('mandatory'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
+			'sql'                     => "int(10) unsigned NOT NULL default 0",
+			'relation'                => array('type'=>'hasOne', 'load'=>'lazy')
 		),
 		'image' => array
 		(

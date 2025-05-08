@@ -19,7 +19,7 @@ array_insert($GLOBALS['BE_MOD']['job'], 100, array
  */
 if (TL_MODE == 'BE')
 {
-	$GLOBALS['TL_CSS'][] = 'bundles/jonnysptierschutz/job.css|static';
+	$GLOBALS['TL_CSS'][] = 'bundles/jonnyspjobs/job.css|static';
 }
 
 
@@ -30,7 +30,8 @@ array_insert($GLOBALS['TL_CTE'], 1, array
 	(
 		'includes' 	=> array
 			(
-				'jobcategorie_viewer'	=> 'JobCategorieViewer'
+				'jobcategorie_viewer'	=> 'JobCategorieViewer',
+				'job_viewer'			=> 'JobViewer'
 			)
 	)
 );

@@ -26,7 +26,7 @@ class JobCategorieViewer extends ContentElement
 		//gets the categorie
 		$objCategorie = \JobCategoriesModel::findByPK($this->jobcategorie);
 		
-		$Job = array();
+		$Jobs = array();
 
 		$filterJob = \JobModel::findAll(
 			array('column' => array('pid=?','published=?'),
@@ -34,6 +34,8 @@ class JobCategorieViewer extends ContentElement
 				   'order' => 'sorting'
 			)
 		);
+
+		//print_r($filterJob);
 
 		//get Categorie data
 		$CategorieImage = \FilesModel::findByPk($objCategorie->image);
@@ -43,11 +45,12 @@ class JobCategorieViewer extends ContentElement
 			"title" => $objCategorie->title,
 			"description" => $objCategorie->description,
 			"image" => array(
-					"meta" => $this->getMetaData($CategorieImage->meta, $objPage->language),
+					//"meta" => $this->getMetaData($CategorieImage->meta, $objPage->language),
 					"path" => $CategorieImage->path,
 					"name" => $CategorieImage->name,
 					"extension" => $CategorieImage->extension
-				)
+			),
+			"jumpTo" => $objCategorie->jumpTo
 		);
 
 		//get Job data
@@ -57,55 +60,54 @@ class JobCategorieViewer extends ContentElement
 				foreach ($filterJob as $key => $value) {
 
 					//main Image
-					$AnimalImage = \FilesModel::findByPk($value->image);
-					
-					//additional sorted Images
-					$AnimalImages = array();
-					$AnimalUnsortedImages = \FilesModel::findMultipleByUuids(StringUtil::deserialize($value->images));
-					$AnimalImagesSort = StringUtil::deserialize($value->imagessort);
-
-			 		if ($AnimalImagesSort){
-			 			foreach ($AnimalImagesSort as $sortkey => $uuid) {
-							if ($AnimalUnsortedImages){
-								foreach ($AnimalUnsortedImages as $Image) {
-									if ($Image->uuid == $uuid) {
-										array_push($AnimalImages, array
-											(
-												"meta" => $this->getMetaData($Image->meta, $objPage->language),
-												"path" => $Image->path,
-												"name" => $Image->name,
-												"extension" => $Image->extension
-											)
-										);
-									}
-								}
-							}
-			 			}
-					}
+					$JobImage = \FilesModel::findByPk($value->image);
+					$JobDownload = \FilesModel::findbyPk($value->download);
+					$Organization_logo = \FilesModel::findbyPk($value->Organization_logo);
 
 					// generate Data_array
-					$Job[$key] = array(
+					$Jobs[$key] = array(
 						"id" => $value->id,
 						"title" => $value->title,
+						"shortdescription" => $value->shortdescription,
 						"description" => $value->description,
 						"published" => $value->published,
-						"tags" => StringUtil::deserialize($value->tags),
-						"categories" => StringUtil::deserialize($value->categories),
+						"directApply" => $value->directApply,
 						"image" =>  array(
-								"meta" => $this->getMetaData($AnimalImage->meta, $objPage->language),
-								"path" => $AnimalImage->path,
-								"name" => $AnimalImage->name,
-								"extension" => $AnimalImage->extension
+								"path" => $JobImage->path,
+								"name" => $JobImage->name,
+								"extension" => $JobImage->extension
 								),
-						"images" => $AnimalImages
+						"download"=>  array(
+							"path" => $JobDownload->path,
+							"name" => $JobDownload->name,
+							"extension" => $JobDownload->extension
+							),
+						"datePosted" => $value->datePosted,
+						"validThrough" => $value->validThrough,
+						"jobLocationType" =>$value->jobLocationType,
+						"employmentType" => $value->employmentType,
+						"Organization_name" =>  $value->Organization_name,
+						"Organization_sameAs" =>  $value->Organization_sameAs,					
+						"Organization_logo" =>  array(
+							"path" => $Organization_logo->path,
+							"name" => $Organization_logo->name,
+							"extension" => $Organization_logo->extension
+							),
+						"street" =>  $value->street,
+						"postalCode" =>  $value->postalCode,
+						"Locality" =>  $value->Locality,	
+						"Region" =>  $value->Region,	
+						"Country" =>  $value->Country,	
+						
 					);
 				}
 			}
 		}
 
 
+
 		$this->Template->JobCategorie = $Categorie;
-		$this->Template->Job = $Job;
+		$this->Template->Jobs = $Jobs;
 
 	}//end compile
 

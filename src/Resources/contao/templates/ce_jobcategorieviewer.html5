@@ -3,18 +3,16 @@
 <?= $this->JobCategorie['description']; ?>
 
 <pre style="background-color:#CCC;">
-<?php print_r($this->JobCategorie); ?>
+<?php //print_r($this->JobCategorie); ?>
 </pre>
 
 <pre style="background-color:#CCC;">
-<?php print_r($this->Jobs); ?>
+<?php //print_r($this->Jobs); ?>
 </pre>
-
 
 <?php foreach ($this->Jobs as $Jobkey => $Job): ?>
     <a href=<?= $Job['href']; ?>><?= $Job['title']; ?></a><br>
 <?php endforeach; ?>
-
 
 <?php 
 //$this->showTemplateVars();

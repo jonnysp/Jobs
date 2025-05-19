@@ -1,5 +1,10 @@
 <?php
 
+
+use Jonnysp\JobModel;
+use Jonnysp\JobCategoriesModel;
+
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['jobcategorie_viewer'] = '{type_legend},type;{job_categories_legend},jobcategorie;{protected_legend:hide},protected;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['fields']['jobcategorie'] = array
 (
@@ -29,7 +34,7 @@ class tl_content_job extends Backend
 	//JobCategory Viewer
 	public function getJobCategorie()
 	{
-		$objCats =  \JobCategoriesModel::findAll();
+		$objCats = JobCategoriesModel::findAll();
 		$arrCats = array();
 		foreach ($objCats as $objCat)
 		{
@@ -48,7 +53,7 @@ class tl_content_job extends Backend
 	//Job Viewer
 	public function getJob()
 	{
-		$objJobs =  \JobModel::findAll();
+		$objJobs = JobModel::findAll();
 		$arrJobs = array();
 		foreach ($objJobs as $objJob)
 		{

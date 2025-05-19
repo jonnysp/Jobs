@@ -1,0 +1,12 @@
+<h1><?= $this->Job['title']; ?></h1>
+<?= $this->Job['description']; ?>
+<?= $this->JobSchema; ?>
+
+
+
+
+
+<?php 
+//$this->showTemplateVars();
+?>
+

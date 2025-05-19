@@ -2,6 +2,9 @@
 <h1><?= $this->JobCategorie['title']; ?></h1>
 <?= $this->JobCategorie['description']; ?>
 
+<pre style="background-color:#CCC;">
+<?php print_r($this->JobCategorie); ?>
+</pre>
 
 <pre style="background-color:#CCC;">
 <?php print_r($this->Jobs); ?>
@@ -9,9 +12,7 @@
 
 
 <?php foreach ($this->Jobs as $Jobkey => $Job): ?>
-
-    <a $href=""><?= $Job['title']; ?></a><br>
-
+    <a href=<?= $Job['href']; ?>><?= $Job['title']; ?></a><br>
 <?php endforeach; ?>
 
 

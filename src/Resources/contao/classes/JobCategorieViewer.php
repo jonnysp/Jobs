@@ -1,5 +1,14 @@
 <?php
 
+namespace Jonnysp;
+
+use Contao\ContentElement;
+use Contao\FilesModel;
+use Contao\PageModel;
+use Contao\StringUtil;
+use Contao\BackendTemplate;
+use Contao\Config;
+
 class JobCategorieViewer extends ContentElement
 {
 	protected $strTemplate = 'ce_jobcategorieviewer';
@@ -8,8 +17,8 @@ class JobCategorieViewer extends ContentElement
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objCat = \JobCategoriesModel::findByPK($this->jobcategorie);
-			$objTemplate = new \BackendTemplate('be_wildcard');
+			$objCat = JobCategoriesModel::findByPK($this->jobcategorie);
+			$objTemplate = new BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### ' . utf8_strtoupper($GLOBALS['TL_LANG']['tl_content']['job_categories_legend']) . ' ###';
 			$objTemplate->title = '['. $objCat->id.'] - '. $objCat->title;
 			return $objTemplate->parse();	
@@ -19,16 +28,17 @@ class JobCategorieViewer extends ContentElement
 
 	protected function compile()
 	{
+
 		global $objPage;
 		$this->loadLanguageFile('tl_job');
 		$this->loadLanguageFile('tl_job_categories');
 
 		//gets the categorie
-		$objCategorie = \JobCategoriesModel::findByPK($this->jobcategorie);
+		$objCategorie = JobCategoriesModel::findByPK($this->jobcategorie);
 		
 		$Jobs = array();
 
-		$filterJob = \JobModel::findAll(
+		$filterJob = JobModel::findAll(
 			array('column' => array('pid=?','published=?'),
 				   'value' => array($this->jobcategorie , 1),
 				   'order' => 'sorting'
@@ -38,7 +48,9 @@ class JobCategorieViewer extends ContentElement
 		//print_r($filterJob);
 
 		//get Categorie data
-		$CategorieImage = \FilesModel::findByPk($objCategorie->image);
+		$CategorieImage = FilesModel::findByPk($objCategorie->image);
+		$jumptoPage = PageModel::findWithDetails($objCategorie->jumpTo);
+
 
 		$Categorie = array(
 			"id" => $objCategorie->id,
@@ -46,12 +58,13 @@ class JobCategorieViewer extends ContentElement
 			"description" => $objCategorie->description,
 			"image" => array(
 					//"meta" => $this->getMetaData($CategorieImage->meta, $objPage->language),
-					"path" => $CategorieImage->path,
-					"name" => $CategorieImage->name,
-					"extension" => $CategorieImage->extension
+					//"path" => $CategorieImage->path,
+					//"name" => $CategorieImage->name,
+					//"extension" => $CategorieImage->extension
 			),
-			"jumpTo" => $objCategorie->jumpTo
+			"jumpTo" => $jumptoPage->getFrontendUrl()
 		);
+
 
 		//get Job data
 		if(is_null($filterJob) == false){
@@ -59,28 +72,41 @@ class JobCategorieViewer extends ContentElement
 			if (count($filterJob) > 0){
 				foreach ($filterJob as $key => $value) {
 
+
+					//gen joblink
+					if ($jumptoPage)
+					{
+						$link = StringUtil::ampersand($jumptoPage->getFrontendUrl(Config::get('useAutoItem') ? '/%s' : '/items/%s'));
+						$joblink = sprintf(preg_replace('/%(?!s)/', '%%', $link), ($value->alias ?: $value->id));
+					}
+
+
 					//main Image
-					$JobImage = \FilesModel::findByPk($value->image);
-					$JobDownload = \FilesModel::findbyPk($value->download);
-					$Organization_logo = \FilesModel::findbyPk($value->Organization_logo);
+					$JobImage = FilesModel::findByPk($value->image);
+					$JobDownload = FilesModel::findbyPk($value->download);
+					$Organization_logo = FilesModel::findbyPk($value->Organization_logo);
 
 					// generate Data_array
 					$Jobs[$key] = array(
-						"id" => $value->id,
-						"title" => $value->title,
-						"shortdescription" => $value->shortdescription,
-						"description" => $value->description,
-						"published" => $value->published,
-						"directApply" => $value->directApply,
+
+						// date('Y-m-d', $this->datePosted)
+
+						"id" => isset($value->id) ? $value->id  : '',
+						"title" => isset($value->title) ? $value->title  : '',
+						"shortdescription" => isset($value->shortdescription) ? $value->shortdescription  : '',
+						"description" => isset($value->description) ? $value->description  : '',
+						"published" => isset($value->published) ? $value->published  : '',
+						"directApply" => isset($value->directApply) ? $value->directApply  : '',
 						"image" =>  array(
-								"path" => $JobImage->path,
-								"name" => $JobImage->name,
-								"extension" => $JobImage->extension
+								"path" => isset($JobImage->path) ? $JobImage->path  : '',
+								"name" => isset($JobImage->name) ? $JobImage->name  : '',
+								"extension" => isset($JobImage->extension) ? $JobImage->extension  : '',
 								),
+
 						"download"=>  array(
-							"path" => $JobDownload->path,
-							"name" => $JobDownload->name,
-							"extension" => $JobDownload->extension
+							"path" => isset($JobDownload->path) ? $JobDownload->path  : '',
+							"name" => isset($JobDownload->name) ? $JobDownload->name  : '',
+							"extension" => isset($JobDownload->extension) ? $JobDownload->extension  : '',
 							),
 						"datePosted" => $value->datePosted,
 						"validThrough" => $value->validThrough,
@@ -89,21 +115,21 @@ class JobCategorieViewer extends ContentElement
 						"Organization_name" =>  $value->Organization_name,
 						"Organization_sameAs" =>  $value->Organization_sameAs,					
 						"Organization_logo" =>  array(
-							"path" => $Organization_logo->path,
-							"name" => $Organization_logo->name,
-							"extension" => $Organization_logo->extension
+							"path" => isset($Organization_logo->path) ? $Organization_logo->path  : '',
+							"name" => isset($Organization_logo->name) ? $Organization_logo->name  : '',
+							"extension" => isset($Organization_logo->extension) ? $Organization_logo->extension  : '',
 							),
 						"street" =>  $value->street,
 						"postalCode" =>  $value->postalCode,
 						"Locality" =>  $value->Locality,	
 						"Region" =>  $value->Region,	
-						"Country" =>  $value->Country,	
+						"Country" =>  $value->Country,
+						"href" => $joblink
 						
 					);
 				}
 			}
 		}
-
 
 
 		$this->Template->JobCategorie = $Categorie;
@@ -112,3 +138,5 @@ class JobCategorieViewer extends ContentElement
 	}//end compile
 
 }//end class
+
+class_alias(JobCategorieViewer::class, 'JobCategorieViewer');

@@ -1,8 +1,16 @@
 <?php
 
-class JobModel extends \Model
+namespace Jonnysp;
+
+
+use Contao\Model;
+
+
+
+class JobModel extends Model
 {
     protected static $strTable = 'tl_job';
+
 
     public function JobSchema(){
 
@@ -82,6 +90,9 @@ class JobModel extends \Model
     }
 
 
+
+
 }
 
 
+class_alias(JobModel::class, 'JobModel');

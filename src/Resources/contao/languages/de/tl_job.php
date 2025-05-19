@@ -14,6 +14,7 @@ $GLOBALS['TL_LANG']['tl_job']['datePosted']  = array('Start Datum','');
 $GLOBALS['TL_LANG']['tl_job']['validThrough']  = array('End Datum','');
 $GLOBALS['TL_LANG']['tl_job']['jobLocationType']  = array('HomeOffice','');
 $GLOBALS['TL_LANG']['tl_job']['directApply']  = array('Nutzer können sich über die Website bewerben','');
+$GLOBALS['TL_LANG']['tl_job']['alias'] = array('Alias','Alias');
 
 $GLOBALS['TL_LANG']['tl_job']['employmentType'] = array('Stellentyp','');
 $GLOBALS['TL_LANG']['tl_job']['FULL_TIME'] = array('Vollzeit','');
@@ -32,13 +33,13 @@ $GLOBALS['TL_LANG']['tl_job']['Region'] = array('Bundesland','Bundesland');
 $GLOBALS['TL_LANG']['tl_job']['postalCode'] = array('PLZ','Postleitzahl');
 $GLOBALS['TL_LANG']['tl_job']['Country'] = array('Land','Iso2 bsp. DE or US');
 
+
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_job']['title_legend'] = 'Job';
 $GLOBALS['TL_LANG']['tl_job']['title_legends'] = 'Jobs';
 $GLOBALS['TL_LANG']['tl_job']['organization_legend'] = 'Firma';
-
 
 
 /**

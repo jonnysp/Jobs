@@ -2,38 +2,95 @@
 
 namespace Jonnysp;
 
-use Contao\ContentElement;
-use Contao\FilesModel;
+use Contao\Module;
+use Contao\System;
 use Contao\BackendTemplate;
+use Contao\Config;
+use Contao\Input;
+use Contao\StringUtil;
+use Contao\FilesModel;
+use Contao\CoreBundle\Exception\InternalServerErrorException;
+use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
 
-
-
-class JobViewer extends ContentElement
+class ModuleJobReader extends Module
 {
-	protected $strTemplate = 'ce_jobviewer';
+
+	protected $strTemplate = 'mod_jobreader';
 
 	public function generate()
 	{
-		if (TL_MODE == 'BE')
+
+		$request = System::getContainer()->get('request_stack')->getCurrentRequest();
+
+		if ($request && System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request))
 		{
-			$objJob = JobModel::findByPK($this->job);
-			$objTemplate = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### ' . utf8_strtoupper($GLOBALS['TL_LANG']['tl_content']['job_legend']) . ' ###';
-			$objTemplate->title = '['. $objJob->id.'] - '. $objJob->title;
-			return $objTemplate->parse();	
+            $objTemplate = new BackendTemplate('be_wildcard');
+            $objTemplate->title = $this->name;
+            return $objTemplate->parse();
+        }
+
+
+		// Set the item from the auto_item parameter
+		if (!isset($_GET['items']) && isset($_GET['auto_item']) && Config::get('useAutoItem'))
+		{
+			Input::setGet('items', Input::get('auto_item'));
 		}
+
+		// Return an empty string if "items" is not set (to combine list and reader on same page)
+		if (!Input::get('items'))
+		{
+			return '';
+		}
+
+		if (empty($this->jobcategorie) || \is_array($this->jobcategorie))
+		{
+			throw new InternalServerErrorException('The Job reader ID ' . $this->id . ' has no categories specified.');
+		}
+
 		return parent::generate();
-	}//end generate
+    }
+
 
 	protected function compile()
 	{
 		global $objPage;
-//		$this->loadLanguageFile('tl_job');
 
-	
+		if ($this->overviewPage)
+		{
+			$this->Template->referer = PageModel::findById($this->overviewPage)->getFrontendUrl();
+			$this->Template->back = $this->customLabel ?: $GLOBALS['TL_LANG']['MSC']['jobOverview'];
+		}
+		else
+		{
+			$this->Template->referer = 'javascript:history.go(-1)';
+			$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
+		}
 
-		//get the job
-		$objJob = JobModel::findByPK($this->job);
+		$objJob  = JobModel::findByIdOrAlias(Input::get('items'));
+
+		if ($objJob === null)
+		{
+			throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
+		}
+
+		$responseContext = System::getContainer()->get('contao.routing.response_context_accessor')->getResponseContext();
+
+		if ($responseContext && $responseContext->has(HtmlHeadBag::class))
+		{
+			$htmlHeadBag = $responseContext->get(HtmlHeadBag::class);
+			$htmlDecoder = System::getContainer()->get('contao.string.html_decoder');
+			
+			if ($objJob->title)
+			{
+				$htmlHeadBag->setTitle($objJob->title); // Already stored decoded
+			}
+
+			if ($objJob->shortdescription)
+			{
+				$htmlHeadBag->setMetaDescription($htmlDecoder->inputEncodedToPlainText($objJob->shortdescription));
+			}
+
+		}
 
 		$JobImage = FilesModel::findByPk($objJob->image);
 		$JobDownload = FilesModel::findbyPk($objJob->download);
@@ -78,14 +135,10 @@ class JobViewer extends ContentElement
 
 		);
 
-
 		$this->Template->Job = $Job;
 		$this->Template->JobSchema  = $objJob->JobSchema();
+    }
 
+}
 
-	}//end compile
-
-}//end class
-
-
-class_alias(JobViewer::class, 'JobViewer');
+class_alias(ModuleJobReader::class, 'ModuleJobReader');

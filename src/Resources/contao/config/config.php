@@ -8,10 +8,30 @@
  * @license LGPL-3.0+
  */
 
-array_insert($GLOBALS['BE_MOD']['job'], 100, array
+use Jonnysp\JobModel;
+use Jonnysp\JobCategoriesModel;
+use Jonnysp\JobViewer;
+use Jonnysp\JobCategorieViewer;
+use Jonnysp\ModuleJobReader;
+use Jonnysp\ModuleJob;
+
+
+
+$GLOBALS['BE_MOD']['job']['jobcategorie' ] = array
 (
-	'jobcategorie' 		=> array('tables' => array('tl_job_categories', 'tl_job'))
-));
+		'tables' => array('tl_job_categories', 'tl_job')
+);
+
+
+// Front end modules
+$GLOBALS['FE_MOD']['job'] = array
+(
+	'jobreader'    => ModuleJobReader::class
+);
+
+
+// Register hooks
+//$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array(ModuleJob::class, 'getSearchablePages');
 
 
 /**
@@ -26,14 +46,12 @@ if (TL_MODE == 'BE')
 /**
  * Front end modules
  */
-array_insert($GLOBALS['TL_CTE'], 1, array
-	(
-		'includes' 	=> array
-			(
-				'jobcategorie_viewer'	=> 'JobCategorieViewer',
-				'job_viewer'			=> 'JobViewer'
-			)
-	)
-);
+$GLOBALS['TL_CTE']['includes']['job_viewer'] = JobViewer::class;
+$GLOBALS['TL_CTE']['includes']['jobcategorie_viewer'] = JobCategorieViewer::class;
+
+
+// Models
+$GLOBALS['TL_MODELS']['tl_job'] = JobModel::class;
+$GLOBALS['TL_MODELS']['tl_job_category'] = JobCategoriesModel::class;
 
 

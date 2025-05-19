@@ -1,5 +1,8 @@
 <?php
 
+use Contao\Image\ResizeConfiguration;
+use Jonnysp\JobCategoriesModel;
+
 /**
  * Table tl_job
  */
@@ -94,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,published,shortdescription,description,image,download,datePosted,validThrough,directApply,jobLocationType,employmentType;{organization_legend},Organization_logo,Organization_name,Organization_sameAs,street,postalCode,Locality,Region,Country;'
+		'default'                     => '{title_legend},title,alias,published,shortdescription,description,image,download,datePosted,validThrough,directApply,jobLocationType,employmentType;{organization_legend},Organization_logo,Organization_name,Organization_sameAs,street,postalCode,Locality,Region,Country;'
 	),
 
 	// Fields
@@ -138,7 +141,17 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'sql'                   => ['type' => 'string', 'length' => 128, 'default' => '']
 		),
-
+		'alias' => array
+		(
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'alias', 'doNotCopy'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
+			'save_callback' => array
+			(
+				array('tl_job', 'generateAlias')
+			),
+			'sql'                     => "varchar(255) BINARY NOT NULL default ''"
+		),
 		'shortdescription' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['shortdescription'],
@@ -292,7 +305,7 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 	)
 );
 
-use Contao\Image\ResizeConfiguration;
+
 
 class tl_job extends Backend{
 
@@ -364,6 +377,31 @@ class tl_job extends Backend{
 		// Update the database
 		$this->Database->prepare("UPDATE tl_job SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")->execute($intId);
 	}
+
+	public function generateAlias($varValue, DataContainer $dc)
+	{
+		$aliasExists = function (string $alias) use ($dc): bool
+		{
+			return $this->Database->prepare("SELECT id FROM tl_job WHERE alias=? AND id!=?")->execute($alias, $dc->id)->numRows > 0;
+		};
+
+		// Generate alias if there is none
+		if (!$varValue)
+		{
+			$varValue = System::getContainer()->get('contao.slug')->generate($dc->activeRecord->title, JobCategoriesModel::findByPk($dc->activeRecord->pid)->jumpTo, $aliasExists);
+		}
+		elseif (preg_match('/^[1-9]\d*$/', $varValue))
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasNumeric'], $varValue));
+		}
+		elseif ($aliasExists($varValue))
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		}
+
+		return $varValue;
+	}
+
 
 }
 

@@ -66,7 +66,7 @@ class ModuleJob extends Frontend
 							continue;
 						}
 
-						if ($objParent->robots == 'noindex,nofollow' || $objParent->noSearch == 1)
+						if ($objParent->robots == 'noindex,nofollow')
 						{
 							continue;
 						}
@@ -89,7 +89,7 @@ class ModuleJob extends Frontend
 				{
 					while ($objItems->next())
 					{
-						if (($blnIsSitemap && $objParent->robots === 'noindex,nofollow') || $objParent->noSearch == 1)
+						if ($blnIsSitemap && $objParent->robots === 'noindex,nofollow')
 						{
 							continue;
 						}

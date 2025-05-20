@@ -30,8 +30,8 @@ class JobCategorieViewer extends ContentElement
 	{
 
 		global $objPage;
-		$this->loadLanguageFile('tl_job');
-		$this->loadLanguageFile('tl_job_categories');
+//		$this->loadLanguageFile('tl_job');
+//		$this->loadLanguageFile('tl_job_categories');
 
 		//gets the categorie
 		$objCategorie = JobCategoriesModel::findByPK($this->jobcategorie);
@@ -45,7 +45,6 @@ class JobCategorieViewer extends ContentElement
 			)
 		);
 
-		//print_r($filterJob);
 
 		//get Categorie data
 		$CategorieImage = FilesModel::findByPk($objCategorie->image);
@@ -57,13 +56,14 @@ class JobCategorieViewer extends ContentElement
 			"title" => $objCategorie->title,
 			"description" => $objCategorie->description,
 			"image" => array(
-					//"meta" => $this->getMetaData($CategorieImage->meta, $objPage->language),
-					//"path" => $CategorieImage->path,
-					//"name" => $CategorieImage->name,
-					//"extension" => $CategorieImage->extension
+					"meta" => isset($CategorieImage) ? $this->getMetaData($CategorieImage->meta, $objPage->language)  : '',
+					"path" => isset($CategorieImage->path) ? $CategorieImage->path  : '',
+					"name" => isset($CategorieImage->name) ? $CategorieImage->name  : '',
+					"extension" => isset($CategorieImage->extension) ? $CategorieImage->extension  : ''
 			),
-			"jumpTo" => $jumptoPage->getFrontendUrl()
+			"jumpTo" => isset($jumptoPage) ? $jumptoPage->getFrontendUrl()  : ''
 		);
+
 
 
 		//get Job data
@@ -80,7 +80,6 @@ class JobCategorieViewer extends ContentElement
 						$joblink = sprintf(preg_replace('/%(?!s)/', '%%', $link), ($value->alias ?: $value->id));
 					}
 
-
 					//main Image
 					$JobImage = FilesModel::findByPk($value->image);
 					$JobDownload = FilesModel::findbyPk($value->download);
@@ -88,8 +87,6 @@ class JobCategorieViewer extends ContentElement
 
 					// generate Data_array
 					$Jobs[$key] = array(
-
-						// date('Y-m-d', $this->datePosted)
 
 						"id" => isset($value->id) ? $value->id  : '',
 						"title" => isset($value->title) ? $value->title  : '',
@@ -119,18 +116,17 @@ class JobCategorieViewer extends ContentElement
 							"name" => isset($Organization_logo->name) ? $Organization_logo->name  : '',
 							"extension" => isset($Organization_logo->extension) ? $Organization_logo->extension  : '',
 							),
-						"street" =>  $value->street,
-						"postalCode" =>  $value->postalCode,
-						"Locality" =>  $value->Locality,	
-						"Region" =>  $value->Region,	
-						"Country" =>  $value->Country,
-						"href" => $joblink
+						"street" => isset($value->street) ? $value->street  : '',
+						"postalCode" => isset($value->postalCode) ? $value->postalCode  : '',
+						"Locality" => isset($value->Locality) ? $value->Locality  : '',
+						"Region" => isset($value->Region) ? $value->Region  : '',
+						"Country" => isset($value->Country) ? $value->Country  : '',
+						"href" => isset($joblink) ? $joblink  : ''
 						
 					);
 				}
 			}
 		}
-
 
 		$this->Template->JobCategorie = $Categorie;
 		$this->Template->Jobs = $Jobs;

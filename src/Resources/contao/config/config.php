@@ -16,7 +16,6 @@ use Jonnysp\ModuleJobReader;
 use Jonnysp\ModuleJob;
 
 
-
 $GLOBALS['BE_MOD']['job']['jobcategorie' ] = array
 (
 		'tables' => array('tl_job_categories', 'tl_job')
@@ -29,10 +28,8 @@ $GLOBALS['FE_MOD']['job'] = array
 	'jobreader'    => ModuleJobReader::class
 );
 
-
 // Register hooks
-//$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array(ModuleJob::class, 'getSearchablePages');
-
+$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array(ModuleJob::class, 'getSearchablePages');
 
 /**
  * Style sheet

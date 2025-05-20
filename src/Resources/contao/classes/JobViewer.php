@@ -7,7 +7,6 @@ use Contao\FilesModel;
 use Contao\BackendTemplate;
 
 
-
 class JobViewer extends ContentElement
 {
 	protected $strTemplate = 'ce_jobviewer';
@@ -29,7 +28,6 @@ class JobViewer extends ContentElement
 	{
 		global $objPage;
 //		$this->loadLanguageFile('tl_job');
-
 	
 
 		//get the job
@@ -77,7 +75,6 @@ class JobViewer extends ContentElement
 			
 
 		);
-
 
 		$this->Template->Job = $Job;
 		$this->Template->JobSchema  = $objJob->JobSchema();

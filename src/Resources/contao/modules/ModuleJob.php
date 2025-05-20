@@ -56,7 +56,12 @@ class ModuleJob extends Frontend
 					{
 						continue;
 					}
-
+                    
+					// The target page has not been published (see #5520)
+					if (!$objParent->published || ($objParent->start && $objParent->start > $time) || ($objParent->stop && $objParent->stop <= $time))
+					{
+						continue;
+					}
 
 	                if ($blnIsSitemap)
 					{
@@ -66,14 +71,20 @@ class ModuleJob extends Frontend
 							continue;
 						}
 
+
+
 						if ($objParent->robots == 'noindex,nofollow')
 						{
 							continue;
 						}
+
+
+
 					}
 
 					// Generate the URL
 					$arrProcessed[$objJobCategorie->jumpTo] = $objParent->getAbsoluteUrl(Config::get('useAutoItem') ? '/%s' : '/items/%s');
+
 				}
 
 				$strUrl = $arrProcessed[$objJobCategorie->jumpTo];

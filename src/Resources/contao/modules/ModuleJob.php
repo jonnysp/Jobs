@@ -57,6 +57,21 @@ class ModuleJob extends Frontend
 						continue;
 					}
 
+
+	                if ($blnIsSitemap)
+					{
+
+						if ($objParent->protected)
+						{
+							continue;
+						}
+
+						if ($objParent->robots == 'noindex,nofollow')
+						{
+							continue;
+						}
+					}
+
 					// Generate the URL
 					$arrProcessed[$objJobCategorie->jumpTo] = $objParent->getAbsoluteUrl(Config::get('useAutoItem') ? '/%s' : '/items/%s');
 				}
@@ -74,7 +89,7 @@ class ModuleJob extends Frontend
 				{
 					while ($objItems->next())
 					{
-						if ($blnIsSitemap && $objItems->robots === 'noindex,nofollow')
+						if ($blnIsSitemap && $objParent->robots === 'noindex,nofollow')
 						{
 							continue;
 						}

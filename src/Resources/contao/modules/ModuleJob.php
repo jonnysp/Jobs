@@ -89,7 +89,7 @@ class ModuleJob extends Frontend
 				{
 					while ($objItems->next())
 					{
-						if ($blnIsSitemap && $objParent->robots === 'noindex,nofollow')
+						if ($blnIsSitemap && $objItems->inSitemap != 1)
 						{
 							continue;
 						}

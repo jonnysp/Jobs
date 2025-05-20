@@ -15,6 +15,9 @@ $GLOBALS['TL_LANG']['tl_job']['validThrough']  = array('End Datum','');
 $GLOBALS['TL_LANG']['tl_job']['jobLocationType']  = array('HomeOffice','');
 $GLOBALS['TL_LANG']['tl_job']['directApply']  = array('Nutzer können sich über die Website bewerben','');
 $GLOBALS['TL_LANG']['tl_job']['alias'] = array('Alias','Alias');
+$GLOBALS['TL_LANG']['tl_job']['inSitemap'] = array('Veröffentlicht in Sitemap','');
+
+
 
 $GLOBALS['TL_LANG']['tl_job']['employmentType'] = array('Stellentyp','');
 $GLOBALS['TL_LANG']['tl_job']['FULL_TIME'] = array('Vollzeit','');

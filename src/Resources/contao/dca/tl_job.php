@@ -97,7 +97,7 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},title,alias,published,shortdescription,description,image,download,datePosted,validThrough,directApply,jobLocationType,employmentType;{organization_legend},Organization_logo,Organization_name,Organization_sameAs,street,postalCode,Locality,Region,Country;'
+		'default'                     => '{title_legend},published,inSitemap,title,alias,shortdescription,description,image,download,datePosted,validThrough,directApply,jobLocationType,employmentType;{organization_legend},Organization_logo,Organization_name,Organization_sameAs,street,postalCode,Locality,Region,Country;'
 	),
 
 	// Fields
@@ -131,6 +131,15 @@ $GLOBALS['TL_DCA']['tl_job'] = array
 			'eval'                    => array('submitOnChange'=>true, 'doNotCopy'=>true, 'tl_class'=>'w50'),
 			'sql'                     => "char(1) NOT NULL default ''",
 			'save_callback'			  => array()
+		),
+
+		'inSitemap' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['inSitemap'],
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array( 'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'sql'                     => "char(1) NOT NULL default '1'",
 		),
 
 		'title' => array

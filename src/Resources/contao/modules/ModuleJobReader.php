@@ -112,7 +112,7 @@ class ModuleJobReader extends Module
 					),
 			"download"=>  array(
 				"path" => isset($JobDownload->path) ? $JobDownload->path  : '',
-				"name" => isset($JobDownload->name) ? $JobDownload->panameth  : '',
+				"name" => isset($JobDownload->name) ? $JobDownload->name  : '',
 				"extension" => isset($JobDownload->extension) ? $JobDownload->extension : ''
 					),
 				"datePosted" => isset($objJob->datePosted) ? $objJob->datePosted : '',

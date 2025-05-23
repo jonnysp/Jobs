@@ -71,14 +71,10 @@ class ModuleJob extends Frontend
 							continue;
 						}
 
-
-
 						if ($objParent->robots == 'noindex,nofollow')
 						{
 							continue;
 						}
-
-
 
 					}
 

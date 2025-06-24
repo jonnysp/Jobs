@@ -11,6 +11,8 @@ use Contao\StringUtil;
 use Contao\FilesModel;
 use Contao\CoreBundle\Exception\InternalServerErrorException;
 use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
+use Contao\CoreBundle\Exception\PageNotFoundException;
+use Contao\Environment;
 
 class ModuleJobReader extends Module
 {
@@ -28,7 +30,6 @@ class ModuleJobReader extends Module
             $objTemplate->title = $this->name;
             return $objTemplate->parse();
         }
-
 
 		// Set the item from the auto_item parameter
 		if (!isset($_GET['items']) && isset($_GET['auto_item']) && Config::get('useAutoItem'))
@@ -55,21 +56,17 @@ class ModuleJobReader extends Module
 	{
 		global $objPage;
 
-		if ($this->overviewPage)
-		{
-			$this->Template->referer = PageModel::findById($this->overviewPage)->getFrontendUrl();
-			$this->Template->back = $this->customLabel ?: $GLOBALS['TL_LANG']['MSC']['jobOverview'];
-		}
-		else
-		{
-			$this->Template->referer = 'javascript:history.go(-1)';
-			$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
-		}
+
+		$this->Template->referer = 'javascript:history.go(-1)';
+		$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
+
 
 		$objJob  = JobModel::findByIdOrAlias(Input::get('items'));
 
-		if ($objJob === null)
+
+		if ($objJob === null || $objJob->published  <>  1  )
 		{
+			
 			throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
 		}
 

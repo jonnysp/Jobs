@@ -27,12 +27,12 @@ class JobViewer extends ContentElement
 	protected function compile()
 	{
 		global $objPage;
-//		$this->loadLanguageFile('tl_job');
-	
+
 
 		//get the job
 		$objJob = JobModel::findByPK($this->job);
 
+		
 		$JobImage = FilesModel::findByPk($objJob->image);
 		$JobDownload = FilesModel::findbyPk($objJob->download);
 		$Organization_logo = FilesModel::findbyPk($objJob->Organization_logo);

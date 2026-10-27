@@ -1,2 +1,2 @@
 # Jobs
-Adds Jobs Management to Contao 4
+Adds Jobs Management to Contao

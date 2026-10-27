@@ -1,11 +1,14 @@
 <?php
 
-namespace Jonnysp;
+namespace Jonnysp\Jobs\ContentElement;
 
 use Contao\ContentElement;
 use Contao\FilesModel;
 use Contao\BackendTemplate;
+use Contao\System;
 
+use Jonnysp\Jobs\Model\JobModel;
+use Jonnysp\Jobs\Model\JobCategoriesModel;
 
 class JobViewer extends ContentElement
 {
@@ -13,65 +16,84 @@ class JobViewer extends ContentElement
 
 	public function generate()
 	{
-		if (TL_MODE == 'BE')
+
+		$request = System::getContainer()->get('request_stack')->getCurrentRequest();
+		if ($request && System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request))
 		{
-			$objJob = JobModel::findByPK($this->job);
+			$objJob = JobModel::findByPK($this->jobs);
 			$objTemplate = new BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### ' . utf8_strtoupper($GLOBALS['TL_LANG']['tl_content']['job_legend']) . ' ###';
+			$objTemplate->wildcard = '### ' . $GLOBALS['TL_LANG']['tl_content']['job_legend'] . ' ###';
 			$objTemplate->title = '['. $objJob->id.'] - '. $objJob->title;
 			return $objTemplate->parse();	
 		}
+
 		return parent::generate();
 	}//end generate
 
+
 	protected function compile()
 	{
-		global $objPage;
-
+		//global $objPage;
 
 		//get the job
-		$objJob = JobModel::findByPK($this->job);
+		$objJob = JobModel::findByPK($this->jobs);
 
+		//dump($objJob);
+
+
+
+		$JobImage = null;
+		if (!empty($objJob->image)) {
+			$JobImage = FilesModel::findByPk($objJob->image);
+		}
 		
-		$JobImage = FilesModel::findByPk($objJob->image);
-		$JobDownload = FilesModel::findbyPk($objJob->download);
-		$Organization_logo = FilesModel::findbyPk($objJob->Organization_logo);
+
+		$JobDownload = null;
+		if (!empty($objJob->download)) {
+			$JobDownload = FilesModel::findByPk($objJob->download);
+		}
+	
+		$Organization_logo = null;
+		if (!empty($objJob->Organization_logo)) {
+			$Organization_logo = FilesModel::findByPk($objJob->Organization_logo);
+		}
+
 
 		$Job = array(
 				"id" => $objJob->id,
 				"pid" => $objJob->pid,
-				"title" => isset($objJob->title) ? $objJob->title : '',
-				"alias" => isset($objJob->alias) ? $objJob->alias : '',
-				"shortdescription" => isset($objJob->shortdescription) ? $objJob->shortdescription : '',
-				"description" => isset($objJob->description) ? $objJob->description : '',
-				"published" => isset($objJob->published) ? $objJob->published : '',
-				"directApply" => isset($objJob->directApply) ? $objJob->directApply : '',
+				"title" => $objJob->title ?? null,
+				"alias" => $objJob->alias ?? null,
+				"shortdescription" => $objJob->shortdescription ?? null,
+				"description" => $objJob->description ?? null,
+				"published" => $objJob->published ?? null,
+				"directApply" => $objJob->directApply ?? null,
 				"image" =>  array(
-					"path" => isset($JobImage->path) ? $JobImage->path  : '',
-					"name" => isset($JobImage->name) ? $JobImage->name  : '',
-					"extension" => isset($JobImage->extension) ? $JobImage->extension  : ''
+					"path" => $JobImage->path  ?? null,
+					"name" => $JobImage->name  ?? null,
+					"extension" => $JobImage->extension ?? null
 					),
 			"download"=>  array(
-				"path" => isset($JobDownload->path) ? $JobDownload->path  : '',
-				"name" => isset($JobDownload->name) ? $JobDownload->panameth  : '',
-				"extension" => isset($JobDownload->extension) ? $JobDownload->extension : ''
+				"path" => $JobDownload->path ?? null,
+				"name" => $JobDownload->panameth ?? null,
+				"extension" => $JobDownload->extension ?? null
 					),
-				"datePosted" => isset($objJob->datePosted) ? $objJob->datePosted : '',
-				"validThrough" => isset($objJob->validThrough) ? $objJob->validThrough : '',
-				"jobLocationType" => isset($objJob->jobLocationType) ? $objJob->jobLocationType : '',
-				"employmentType" => isset($objJob->employmentType) ? $objJob->employmentType : '',
-				"Organization_name" => isset($objJob->Organization_name) ? $objJob->Organization_name : '',
-				"Organization_sameAs" => isset($objJob->Organization_sameAs) ? $objJob->Organization_sameAs : '',			
+				"datePosted" => $objJob->datePosted ?? null,
+				"validThrough" => $objJob->validThrough?? null,
+				"jobLocationType" => $objJob->jobLocationType ?? null,
+				"employmentType" => $objJob->employmentType ?? null,
+				"Organization_name" => $objJob->Organization_name ?? null,
+				"Organization_sameAs" => $objJob->Organization_sameAs ?? null,			
 				"Organization_logo" =>  array(
-					"path" => isset($Organization_logo->path) ? $Organization_logo->path  : '',
-					"name" => isset($Organization_logo->name) ? $Organization_logo->name  : '',
-					"extension" => isset($Organization_logo->extension) ? $Organization_logo->extension  : '',
+					"path" => $Organization_logo->path  ?? null,
+					"name" => $Organization_logo->name  ?? null,
+					"extension" => $Organization_logo->extension  ?? null,
 					),
-			"street" => isset($objJob->street) ? $objJob->street : '',
-			"postalCode" => isset($objJob->postalCode) ? $objJob->postalCode : '',
-			"Locality" => isset($objJob->Locality) ? $objJob->Locality : '',
-			"Region" => isset($objJob->Region) ? $objJob->Region : '',
-			"Country" => isset($objJob->Country) ? $objJob->Country : ''
+			"street" => $objJob->street ?? null,
+			"postalCode" => $objJob->postalCode ?? null,
+			"Locality" => $objJob->Locality ?? null,
+			"Region" => $objJob->Region ?? null,
+			"Country" => $objJob->Country ?? null
 			
 
 		);
@@ -83,6 +105,3 @@ class JobViewer extends ContentElement
 	}//end compile
 
 }//end class
-
-
-class_alias(JobViewer::class, 'JobViewer');

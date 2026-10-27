@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="plaintext" original="src/Resources/contao/languages/de/tl_jobs_categories.xlf" source-language="en" target-language="de">
+    <body>
+
+      <trans-unit id="tl_jobs_categories.title.0">
+        <source>Job category name</source>
+        <target>Jobkategoriename</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.title.1">
+        <source>Please enter the job category name.</source>
+        <target>Geben Sie hier den Namen der Jobkategorie ein.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.image.0">
+        <source>Job category image</source>
+        <target>Bild der Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.image.1">
+        <source>Select an image for the category.</source>
+        <target>Wählen Sie ein Bild für die Jobkategorie aus.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.description.0">
+        <source>Job category description</source>
+        <target>Beschreibung der Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.description.1">
+        <source>Description of the category.</source>
+        <target>Beschreibung der Kategorie.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.jumpTo.0">
+        <source>Redirect page</source>
+        <target>Weiterleitungsseite</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.jumpTo.1">
+        <source>Select the target page.</source>
+        <target>Wählen Sie die Zielseite aus.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.title_legend">
+        <source>Basic settings</source>
+        <target>Grundeinstellungen der Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.image_legend">
+        <source>Category settings</source>
+        <target>Einstellungen der Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.new.0">
+        <source>New job category</source>
+        <target>Neue Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.new.1">
+        <source>Create a new job category.</source>
+        <target>Eine neue Jobkategorie anlegen.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.show.0">
+        <source>Job category details</source>
+        <target>Details der Jobkategorie</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.show.1">
+        <source>Show details of job category ID %s.</source>
+        <target>Details der Jobkategorie ID %s anzeigen.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.edit.0">
+        <source>Edit jobs</source>
+        <target>Jobs bearbeiten</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.edit.1">
+        <source>Edit jobs in category ID %s.</source>
+        <target>Jobs der Kategorie ID %s bearbeiten.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.editheader.0">
+        <source>Edit job category</source>
+        <target>Jobkategorie bearbeiten</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.editheader.1">
+        <source>Edit job category ID %s.</source>
+        <target>Jobkategorie ID %s bearbeiten.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.copy.0">
+        <source>Copy job category</source>
+        <target>Jobkategorie kopieren</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.copy.1">
+        <source>Copy job category ID %s.</source>
+        <target>Jobkategorie ID %s kopieren.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.delete.0">
+        <source>Delete job category</source>
+        <target>Jobkategorie löschen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs_categories.delete.1">
+        <source>Delete job category ID %s.</source>
+        <target>Jobkategorie ID %s löschen.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

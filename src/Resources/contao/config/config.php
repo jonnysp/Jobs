@@ -1,54 +1,50 @@
 <?php
 
-/**
- * Contao Open Source CMS
- *
- * Copyright (c) 2005-2025 Jonny Spitzner
- *
- * @license LGPL-3.0+
- */
+use Contao\Model;
+use Contao\ArrayUtil;
+use Contao\System;
+use Symfony\Component\HttpFoundation\Request;
 
-use Jonnysp\JobModel;
-use Jonnysp\JobCategoriesModel;
-use Jonnysp\JobViewer;
-use Jonnysp\JobCategorieViewer;
-use Jonnysp\ModuleJobReader;
-use Jonnysp\ModuleJob;
+use Jonnysp\Jobs\Model\JobModel;
+use Jonnysp\Jobs\Model\JobCategoriesModel;
 
+use Jonnysp\Jobs\ContentElement\JobViewer;
+use Jonnysp\Jobs\ContentElement\JobCategorieViewer;
 
-$GLOBALS['BE_MOD']['job']['jobcategorie' ] = array
-(
-		'tables' => array('tl_job_categories', 'tl_job')
-);
+use Jonnysp\Jobs\Module\ModuleJobReader;
+use Jonnysp\Jobs\Module\ModuleJob;
 
-
-// Front end modules
-$GLOBALS['FE_MOD']['job'] = array
-(
-	'jobreader'    => ModuleJobReader::class
-);
-
-// Register hooks
-$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array(ModuleJob::class, 'getSearchablePages');
+// Models
+$GLOBALS['TL_MODELS']['tl_jobs'] = JobModel::class;
+$GLOBALS['TL_MODELS']['tl_jobs_categories'] = JobCategoriesModel::class;
 
 /**
- * Style sheet
- */
-if (TL_MODE == 'BE')
-{
-	$GLOBALS['TL_CSS'][] = 'bundles/jonnyspjobs/job.css|static';
-}
-
-
-/**
- * Front end modules
+ * Content Elements
  */
 $GLOBALS['TL_CTE']['includes']['job_viewer'] = JobViewer::class;
 $GLOBALS['TL_CTE']['includes']['jobcategorie_viewer'] = JobCategorieViewer::class;
 
 
-// Models
-$GLOBALS['TL_MODELS']['tl_job'] = JobModel::class;
-$GLOBALS['TL_MODELS']['tl_job_category'] = JobCategoriesModel::class;
+$GLOBALS['BE_MOD']['jobs']['jobcategorie' ] = array
+(
+	'tables' => array('tl_jobs_categories', 'tl_jobs')
+);
 
+
+// Front end modules
+$GLOBALS['FE_MOD']['jobs'] = array
+(
+	'jobreader'    => ModuleJobReader::class
+);
+
+
+/**
+ * Style sheet
+ */
+if (System::getContainer()->get('contao.routing.scope_matcher')
+	->isBackendRequest(System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create(''))
+) 
+{
+	$GLOBALS['TL_CSS'][] = 'bundles/jonnyspjobs/jobs.css|static';
+};
 

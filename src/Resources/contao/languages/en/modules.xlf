@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="plaintext" original="src/Resources/contao/languages/en/modules.xlf" source-language="de" target-language="en">
+    <body>
+
+      <trans-unit id="MOD.job.0">
+        <source>Jobverwaltung</source>
+        <target>Job Administration</target>
+      </trans-unit>
+
+      <trans-unit id="MOD.jobcategorie.0">
+        <source>Jobs</source>
+        <target>Jobs</target>
+      </trans-unit>
+
+      <trans-unit id="MOD.jobcategorie.1">
+        <source>Stellenanzeigen verwalten</source>
+        <target>Manage Job Listings</target>
+      </trans-unit>
+
+      <trans-unit id="CTE.jobcategorie_viewer.0">
+        <source>Jobkategorie</source>
+        <target>Job Category</target>
+      </trans-unit>
+
+      <trans-unit id="CTE.jobcategorie_viewer.1">
+        <source>Kategorieansicht für Stellenanzeigen</source>
+        <target>Category View for Job Listings</target>
+      </trans-unit>
+
+      <trans-unit id="CTE.job_viewer.0">
+        <source>Stellenanzeige</source>
+        <target>Job Listing</target>
+      </trans-unit>
+
+      <trans-unit id="CTE.job_viewer.1">
+        <source>Detailansicht einer Stellenanzeige</source>
+        <target>Detailed View of a Job Listing</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

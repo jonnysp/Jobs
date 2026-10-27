@@ -1,9 +1,10 @@
 <?php
-namespace Jonnysp;
+namespace Jonnysp\Jobs\Model;
 
-class JobCategoriesModel extends \Model
+use Contao\Model;
+
+class JobCategoriesModel extends Model
 {
-    protected static $strTable = 'tl_job_categories';
+    protected static $strTable = 'tl_jobs_categories';
 }
 
-class_alias(JobCategoriesModel::class, 'JobCategoriesModel');

@@ -1,17 +1,17 @@
 <?php
-
-
+use Contao\DC_Table;
 /**
  * Table job
  */
-$GLOBALS['TL_DCA']['tl_job_categories'] = array
+$GLOBALS['TL_DCA']['tl_jobs_categories'] = array
 (
 
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_job'),
+		'dataContainer'               => DC_Table::class,
+		'ctable'                      => array('tl_jobs'),
+		'markAsCopy'                  => 'title',
 		'enableVersioning'            => true,
 		'sql' => array
 		(
@@ -32,12 +32,13 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 			'flag'                    => 1,
 			'panelLayout'             => 'filter;search,limit'
 		),
+
 		'label' => array
 		(
-			'fields'                  => array('id','title'),
-			'format'                  => '[%s] - %s'
+			'fields'                  => array('title', 'id'),
+			'format'                  => '%s - [%s]'
 		),
-		
+
 		'global_operations' => array
 		(
 			'all' => array
@@ -48,40 +49,6 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 				'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
 			)
 		),
-		'operations' => array
-		(
-			'edit' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_job_categories']['edit'],
-				'href'                => 'table=tl_job',
-				'icon'                => 'edit.svg'
-			),
-			'editheader' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_job_categories']['editheader'],
-				'href'                => 'act=edit',
-				'icon'                => 'header.svg'
-			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_job_categories']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.svg'
-			),
-			'delete' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_job_categories']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.svg',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
-			),
-			'show' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_job_categories']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.svg'
-			)
-		)
 	),
 
 	// Palettes
@@ -103,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 		),
 		'title' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job_categories']['title'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs_categories']['title'],
 			'search'                  => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -111,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 		),
 		'jumpTo' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job_categories']['jumpTo'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs_categories']['jumpTo'],
 			'exclude'                 => true,
 			'inputType'               => 'pageTree',
 			'foreignKey'              => 'tl_page.title',
@@ -121,19 +88,17 @@ $GLOBALS['TL_DCA']['tl_job_categories'] = array
 		),
 		'image' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job_categories']['image'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs_categories']['image'],
 			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes']),
+			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>'%contao.image.valid_extensions%'),
 			'sql'                     => "binary(16) NULL",
 		),
 		'description' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_job_categories']['description'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs_categories']['description'],
 			'inputType'               => 'textarea',
 			'eval'                    => array('rte'=>'tinyMCE'),
 			'sql'                     => "text NULL"
 		)
 	)
 );
-
-

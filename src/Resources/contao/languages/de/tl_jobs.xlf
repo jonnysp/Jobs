@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file datatype="plaintext" original="src/Resources/contao/languages/de/tl_jobs.xlf" source-language="en" target-language="de">
+    <body>
+
+      <trans-unit id="tl_jobs.categories.0">
+        <source>Job categories</source>
+        <target>Jobkategorien</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.categories.1">
+        <source>Assign job categories here.</source>
+        <target>Ordnen Sie hier die Jobkategorien zu.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.title.0">
+        <source>Job title</source>
+        <target>Stellenbezeichnung</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.title.1">
+        <source>Enter the job title here.</source>
+        <target>Geben Sie hier die Stellenbezeichnung ein.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.image.0">
+        <source>Job image</source>
+        <target>Stellenbild</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.image.1">
+        <source>Job image.</source>
+        <target>Bild zur Stellenanzeige.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.shortdescription.0">
+        <source>Short description</source>
+        <target>Kurzbeschreibung</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.shortdescription.1">
+        <source>Job short description.</source>
+        <target>Kurzbeschreibung der Stellenanzeige.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.description.0">
+        <source>Description</source>
+        <target>Beschreibung</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.description.1">
+        <source>Job description.</source>
+        <target>Beschreibung der Stellenanzeige.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.download.0">
+        <source>Attachment</source>
+        <target>Anhang</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.toggle.0">
+        <source>Enabled</source>
+        <target>Aktiviert</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.datePosted.0">
+        <source>Start date</source>
+        <target>Veröffentlichungsdatum</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.validThrough.0">
+        <source>End date</source>
+        <target>Gültig bis</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.jobLocationType.0">
+        <source>Home office</source>
+        <target>Homeoffice</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.directApply.0">
+        <source>Applicants can apply via the website</source>
+        <target>Bewerber können sich über die Website bewerben</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.alias.0">
+        <source>Alias</source>
+        <target>Alias</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.alias.1">
+        <source>Unique alias of the job posting</source>
+        <target>Eindeutiger Alias der Stellenanzeige</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.inSitemap.0">
+        <source>Published in sitemap</source>
+        <target>In Sitemap veröffentlichen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.employmentType.0">
+        <source>Employment type</source>
+        <target>Beschäftigungsart</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.FULL_TIME.0">
+        <source>Full time</source>
+        <target>Vollzeit</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.PART_TIME.0">
+        <source>Part time</source>
+        <target>Teilzeit</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.TEMPORARY.0">
+        <source>Temporary employment</source>
+        <target>Befristete Anstellung</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.INTERN.0">
+        <source>Internship</source>
+        <target>Praktikum</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.VOLUNTEER.0">
+        <source>Volunteer</source>
+        <target>Ehrenamtliche Tätigkeit</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.OTHER.0">
+        <source>Other employment type</source>
+        <target>Sonstige Beschäftigungsart</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Organization_name.0">
+        <source>Company name</source>
+        <target>Firmenname</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Organization_sameAs.0">
+        <source>Company website</source>
+        <target>Firmenwebseite</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Organization_logo.0">
+        <source>Company logo</source>
+        <target>Firmenlogo</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.street.0">
+        <source>Street</source>
+        <target>Straße</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Locality.0">
+        <source>City</source>
+        <target>Ort</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Region.0">
+        <source>Region</source>
+        <target>Region</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.postalCode.0">
+        <source>Postal code</source>
+        <target>Postleitzahl</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.Country.0">
+        <source>Country</source>
+        <target>Land</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.title_legend">
+        <source>Job</source>
+        <target>Stellenanzeige</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.organization_legend">
+        <source>Company</source>
+        <target>Unternehmen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.new.0">
+        <source>New job</source>
+        <target>Neue Stellenanzeige</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.new.1">
+        <source>Create a new job</source>
+        <target>Eine neue Stellenanzeige erstellen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.show.0">
+        <source>Job details</source>
+        <target>Details der Stellenanzeige</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.show.1">
+        <source>Show details of job ID %s</source>
+        <target>Details der Stellenanzeige mit der ID %s anzeigen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.edit.0">
+        <source>Edit job</source>
+        <target>Stellenanzeige bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.edit.1">
+        <source>Edit job ID %s</source>
+        <target>Stellenanzeige mit der ID %s bearbeiten</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.copy.0">
+        <source>Copy job</source>
+        <target>Stellenanzeige kopieren</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.copy.1">
+        <source>Copy job ID %s</source>
+        <target>Stellenanzeige mit der ID %s kopieren</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.delete.0">
+        <source>Delete job</source>
+        <target>Stellenanzeige löschen</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.delete.1">
+        <source>Delete job ID %s</source>
+        <target>Stellenanzeige mit der ID %s löschen</target>
+      </trans-unit>
+
+      <trans-unit id="tl_jobs.cut.0">
+        <source>Move job</source>
+        <target>Stellenanzeige verschieben</target>
+      </trans-unit>
+      <trans-unit id="tl_jobs.cut.1">
+        <source>Move job ID %s</source>
+        <target>Stellenanzeige mit der ID %s verschieben</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

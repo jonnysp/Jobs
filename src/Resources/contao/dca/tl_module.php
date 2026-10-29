@@ -1,12 +1,6 @@
 <?php
-use Contao\System;
-use Contao\Backend;
-use Contao\DataContainer;
-use Contao\StringUtil;
-use Contao\Image;
 
-
-use Jonnysp\Jobs\Model\JobCategoriesModel;
+use Jonnysp\JobCategoriesModel;
 
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['jobreader']   = '{title_legend},name,type,jobcategorie;';
@@ -35,17 +29,11 @@ class tl_module_job extends Backend
 		return $arrCats;
 	}
 
-	public function editJobCategorie(DataContainer $dc): string
+	public function editJobCategorie(DataContainer $dc)
 	{
-
-		$this->loadLanguageFile('tl_jobs_categories');
-		if ($dc->value < 1)
-        {
-            return '';
-        }
-		$title = sprintf($GLOBALS['TL_LANG']['tl_jobs_categories']['edit'][1], $dc->value);
-		$href = System::getContainer()->get('router')->generate('contao_backend', array('do'=>'jobcategorie', 'table'=>'tl_jobs_categories','act'=>'edit', 'id'=>$dc->value , 'popup'=>'1', 'nb'=>'1'));
-		return ' <a href="' . StringUtil::specialcharsUrl($href) . '" onclick="Backend.openModalIframe({\'title\':\'' . StringUtil::specialchars(str_replace("'", "\\'", $title)) . '\',\'url\':this.href});return false">' . Image::getHtml('edit.svg', $title) . '</a>';
+		$this->loadLanguageFile('tl_job_categories');
+		return ($dc->value < 1) ? '' : ' <a href="contao/main.php?do=jobcategorie&amp;act=edit&amp;id=' . $dc->value . '&amp;popup=1&amp;nb=1&amp;rt=' . REQUEST_TOKEN . '" title="' . sprintf(StringUtil::specialchars($GLOBALS['TL_LANG']['tl_job_categories']['editheader'][1]), $dc->value) . '" onclick="Backend.openModalIframe({\'title\':\'' . StringUtil::specialchars(str_replace("'", "\\'", sprintf($GLOBALS['TL_LANG']['tl_job_categories']['editheader'][1], $dc->value))) . '\',\'url\':this.href});return false">' . Image::getHtml('alias.svg', $GLOBALS['TL_LANG']['tl_job_categories']['editheader'][0]) . '</a>';
 	}
-	
+
+
 }

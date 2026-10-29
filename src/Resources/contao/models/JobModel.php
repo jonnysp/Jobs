@@ -1,14 +1,15 @@
 <?php
 
-namespace Jonnysp\Jobs\Model;
+namespace Jonnysp;
+
 
 use Contao\Model;
-use Contao\FilesModel;
-use Contao\Environment;
+
 
 class JobModel extends Model
 {
-    protected static $strTable = 'tl_jobs';
+    protected static $strTable = 'tl_job';
+
 
     public function JobSchema(){
 
@@ -50,9 +51,9 @@ class JobModel extends Model
                 $out .= '	"sameAs": "'. $this->Organization_sameAs .'",';
             };
 
-            $logo = FilesModel::findbyPk($this->Organization_logo); 
+            $logo = \FilesModel::findbyPk($this->Organization_logo); 
             if (isset($logo->path)){
-                $out .= '  "logo": "'. Environment::get('base') . $logo->path. '"';
+                $out .= '  "logo": "'. \Environment::get('base') . $logo->path. '"';
             };
 
         $out .= '	},';
@@ -87,5 +88,10 @@ class JobModel extends Model
         return $out;
     }
 
+
+
+
 }
 
+
+class_alias(JobModel::class, 'JobModel');

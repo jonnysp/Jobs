@@ -1,22 +1,19 @@
 <?php
-use Contao\DC_Table;
-use Contao\Config;
-use Contao\Backend;
-use Contao\DataContainer;
-use Contao\StringUtil;
-use Contao\Database;
 
+use Contao\Image\ResizeConfiguration;
+use Jonnysp\JobCategoriesModel;
 
 /**
- * Table tl_jobs
+ * Table tl_job
  */
-$GLOBALS['TL_DCA']['tl_jobs'] = array
+$GLOBALS['TL_DCA']['tl_job'] = array
 (
+
 	// Config
 	'config' => array
 	(
-		'dataContainer'               =>  DC_Table::class,
-		'ptable'                      => 'tl_jobs_categories',
+		'dataContainer'               => 'Table',
+		'ptable'                      => 'tl_job_categories',
 		'enableVersioning'            => true,
 		'sql' => array
 		(
@@ -36,13 +33,9 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 			'mode'                    => 4,
 			'fields'                  => array('sorting'),
 			'headerFields'            => array('title'),
-			'panelLayout'             => 'filter;search,limit'
-		),
-		
-		'label' => array
-		(
-			'fields'                  => array('title', 'id'),
-			'format'                  => '%s - [%s]'
+			'flag'        			  => 1,
+			'panelLayout'             => 'filter;search,limit',
+			'child_record_callback'   => array('tl_job', 'generateReferenzRow')
 		),
 
 		'global_operations' => array
@@ -55,22 +48,50 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 				'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
 			)
 		),
-
+		
 		'operations' => array
-        (
-        	'edit',
-        	'copy',
-        	'cut',
-        	'delete',
-        	'toggle' => array
-        	(
-        	        'href'                => 'act=toggle&field=published',
-        	        'icon'                => 'visible.svg',
-        	        'primary'             => true
-        	),
-        	'show'
-        )
+		(
 
+			'edit' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['edit'],
+				'href'                => 'act=edit',
+				'icon'                => 'edit.svg'
+			),
+
+			'copy' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['copy'],
+				'href'                => 'act=copy',
+				'icon'                => 'copy.svg'
+			),
+			'cut' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['cut'],
+				'href'                => 'act=paste&amp;mode=cut',
+				'icon'                => 'cut.svg'
+			),
+			'delete' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['delete'],
+				'href'                => 'act=delete',
+				'icon'                => 'delete.svg',
+				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+			),
+			'show' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['show'],
+				'href'                => 'act=show',
+				'icon'                => 'show.svg'
+			),
+			'toggle' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_job']['toggle'],
+				'icon'                => 'visible.svg',
+				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback'     => array('tl_job', 'toggleIcon')
+			)
+		)
 	),
 
 	// Palettes
@@ -104,17 +125,17 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'published' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['toggle'],
-			'toggle'                  => true,
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['toggle'],
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>true, 'doNotCopy'=>true, 'tl_class'=>'w50'),
-            'sql'                     => array('type'=>'boolean', 'default'=>false)
+			'sql'                     => "char(1) NOT NULL default ''",
+			'save_callback'			  => array()
 		),
 
 		'inSitemap' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['inSitemap'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['inSitemap'],
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array( 'doNotCopy'=>true, 'tl_class'=>'w50'),
@@ -123,7 +144,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'title' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['title'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['title'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -134,14 +155,15 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'alias', 'doNotCopy'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
-			'save_callback' 		  => array(	
-				array('tl_jobs_callback', 'generateAlias')
+			'save_callback' => array
+			(
+				array('tl_job', 'generateAlias')
 			),
 			'sql'                     => "varchar(255) BINARY NOT NULL default ''"
 		),
 		'shortdescription' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['shortdescription'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['shortdescription'],
 			'inputType'               => 'textarea',
 			'eval'                    => array('rte'=>'tinyMCE','tl_class'=>'clr'),
 			'sql'                     => ['type' => 'text','notnull' => false]
@@ -149,7 +171,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'description' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['description'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['description'],
 			'inputType'               => 'textarea',
 			'eval'                    => array('rte'=>'tinyMCE','tl_class'=>'clr'),
 			'sql'                     => ['type' => 'text','notnull' => false]
@@ -157,7 +179,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'datePosted' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['datePosted'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['datePosted'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true,'rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
@@ -166,7 +188,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'validThrough' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['validThrough'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['validThrough'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'datim', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
@@ -175,7 +197,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'jobLocationType' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['jobLocationType'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['jobLocationType'],
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>false, 'doNotCopy'=>true, 'tl_class'=>'w50'),
@@ -184,17 +206,17 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'employmentType' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['employmentType'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['employmentType'],
 			'inputType'               => 'select',
 			'options'                 => array('FULL_TIME','PART_TIME','TEMPORARY','INTERN','VOLUNTEER','OTHER'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_jobs'],
+			'reference'               => &$GLOBALS['TL_LANG']['tl_job'],
 			'eval'                    => array( 'tl_class'=>'w100 clr', 'mandatory' => true),
 			'sql'                     => "varchar(128) NOT NULL default 'FULL_TIME'"
 		),
 
 		'directApply' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['directApply'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['directApply'],
 			'filter'                  => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>false, 'doNotCopy'=>true, 'tl_class'=>'w50'),
@@ -203,7 +225,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 		
 		'Organization_name' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['Organization_name'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Organization_name'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -212,7 +234,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'Organization_sameAs' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['Organization_sameAs'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Organization_sameAs'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -221,15 +243,15 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'Organization_logo' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['Organization_logo'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['Organization_logo'],
 			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>'%contao.image.valid_extensions%',  'tl_class'=>'w100 clr'),
+			'eval'                    => array( 'fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes'], 'tl_class'=>'w100 clr'),
 			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
 		),
 
 		'street' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['street'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['street'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w100 clr'),
@@ -238,7 +260,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'Locality' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['Locality'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Locality'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -247,7 +269,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'Region' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['Region'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Region'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -256,7 +278,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'postalCode' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['postalCode'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['postalCode'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -265,7 +287,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'Country' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['Country'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['Country'],
 			'search'              	=> true,
 			'inputType'          	=> 'text',
 			'eval'                  => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
@@ -274,7 +296,7 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'download' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_jobs']['download'],
+			'label'                 => &$GLOBALS['TL_LANG']['tl_job']['download'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
 			'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'mandatory'=>false, 'tl_class'=>'w100 clr', 'extensions' => Config::get('allowedDownload')),
@@ -283,9 +305,9 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 		'image' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_jobs']['image'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_job']['image'],
 			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>'%contao.image.valid_extensions%',  'tl_class'=>'w100 clr'),
+			'eval'                    => array( 'fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'extensions'=>$GLOBALS['TL_CONFIG']['validImageTypes'], 'tl_class'=>'w100 clr'),
 			'sql'                     => ['type' => 'binary','notnull' => false,'length' => 16,'fixed' => true]
 		)
 
@@ -294,24 +316,101 @@ $GLOBALS['TL_DCA']['tl_jobs'] = array
 
 
 
+class tl_job extends Backend{
 
-class tl_jobs_callback extends Backend {
 
-	public function generateAlias($value, DataContainer $dc): string
+	public function generateReferenzRow($arrRow)	{
+		$this->loadLanguageFile('tl_job');
+
+		$label = $arrRow['title'];
+
+		if ($arrRow['image'] != '')
+		{
+			$objFile = FilesModel::findByUuid($arrRow['image']);
+			if ($objFile !== null)
+			{
+				$container = System::getContainer();
+				$rootDir = $container->getParameter('kernel.project_dir');
+
+				$label = Image::getHtml($container->get('contao.image.image_factory')->create($rootDir.'/'.$objFile->path,(new ResizeConfiguration())->setWidth(80)->setHeight(80)->setMode(ResizeConfiguration::MODE_BOX))->getUrl($rootDir), '', 'style="float:left;"') . ' ' . $label;
+
+			}
+		}
+		return $label;
+    }
+
+
+
+
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
-		if (!$value) {
-			$value = StringUtil::generateAlias($dc->activeRecord->title);
+		if (strlen(Input::get('tid')))
+		{
+			$this->toggleVisibility(Input::get('tid'), (Input::get('state') == 1), (@func_get_arg(12) ?: null));
+			$this->redirect($this->getReferer());
 		}
 
-		$exists = Database::getInstance()
-			->prepare('SELECT id FROM tl_jobs WHERE alias=? AND id!=?')
-			->execute($value, $dc->id);
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
 
-		if ($exists->numRows > 0) {
-			$value .= '-' . $dc->id;
+		if (!$row['published'])
+		{
+			$icon = 'invisible.gif';
 		}
 
-		return $value;
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
 	}
 
+
+	public function toggleVisibility($intId, $blnVisible, DataContainer $dc=null)
+	{
+		Input::setGet('id', $intId);
+		Input::setGet('act', 'toggle');
+
+		// Trigger the save_callback
+		if (is_array($GLOBALS['TL_DCA']['tl_job']['fields']['published']['save_callback']))
+		{
+			foreach ($GLOBALS['TL_DCA']['tl_job']['fields']['published']['save_callback'] as $callback)
+			{
+				if (is_array($callback))
+				{
+					$this->import($callback[0]);
+					$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
+				}
+				elseif (is_callable($callback))
+				{
+					$blnVisible = $callback($blnVisible, ($dc ?: $this));
+				}
+			}
+		}
+
+		// Update the database
+		$this->Database->prepare("UPDATE tl_job SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")->execute($intId);
+	}
+
+	public function generateAlias($varValue, DataContainer $dc)
+	{
+		$aliasExists = function (string $alias) use ($dc): bool
+		{
+			return $this->Database->prepare("SELECT id FROM tl_job WHERE alias=? AND id!=?")->execute($alias, $dc->id)->numRows > 0;
+		};
+
+		// Generate alias if there is none
+		if (!$varValue)
+		{
+			$varValue = System::getContainer()->get('contao.slug')->generate($dc->activeRecord->title, JobCategoriesModel::findByPk($dc->activeRecord->pid)->jumpTo, $aliasExists);
+		}
+		elseif (preg_match('/^[1-9]\d*$/', $varValue))
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasNumeric'], $varValue));
+		}
+		elseif ($aliasExists($varValue))
+		{
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+		}
+
+		return $varValue;
+	}
+
+
 }
+
